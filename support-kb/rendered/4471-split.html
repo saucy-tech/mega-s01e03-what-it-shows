@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<!--e2jw2j--><!----><title>#4471 · two date problems merged into one ticket · support kb</title>
+		<style>:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6a66;--line:#e3e0d8;--accent:#2f6f5e;--warn:#b4501f;--warn-bg:#fbeee6;--note-bg:#eef5f2;--mono:ui-monospace, "Cascadia Code", Menlo, monospace}@media (prefers-color-scheme:dark){:root{--bg:#171716;--fg:#ecebe6;--muted:#9c9a93;--line:#34332f;--accent:#6fbfa6;--warn:#f0905d;--warn-bg:#3a2418;--note-bg:#1d2c27}}body{background:var(--bg);color:var(--fg);margin:0;font:16px/1.6 system-ui,sans-serif}.kb table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.92rem}.kb th,.kb td{border-bottom:1px solid var(--line);text-align:left;padding:.35rem .5rem}.kb code{font-family:var(--mono);font-size:.88em}.kb a{color:var(--accent)}.kb.svelte-e2jw2j{max-width:760px;margin:0 auto;padding:2rem 16px 4rem}.crumb.svelte-e2jw2j{font:.8rem var(--mono);color:var(--muted);text-decoration:none}h1.svelte-e2jw2j{margin:.25rem 0 .5rem;line-height:1.2}.meta.svelte-e2jw2j{color:var(--muted);flex-wrap:wrap;gap:.5rem 1rem;margin:0;font-size:.85rem;display:flex}.status.svelte-e2jw2j{border:1px solid var(--line);border-radius:99px;padding:0 .6rem}.stale.svelte-e2jw2j{color:var(--warn);font-weight:600}.banner.svelte-e2jw2j{background:var(--warn-bg);color:var(--warn);border-radius:6px;padding:.6rem 1rem}footer.svelte-e2jw2j{color:var(--muted);border-top:1px solid var(--line);margin-top:3rem;padding-top:1rem;font-size:.8rem}
+</style>
+		<style>aside.svelte-17bri61{border-left:4px solid var(--accent);background:var(--note-bg);margin:1rem 0;padding:.5rem 1rem}aside.warn.svelte-17bri61{border-color:var(--warn);background:var(--warn-bg)}
+</style>
+		<style>caption.svelte-kl6rzl{text-align:left;margin-bottom:.5rem;font-weight:600}.ids.svelte-kl6rzl{font:.85rem var(--mono);overflow-wrap:anywhere;color:var(--muted)}.stamp.svelte-1280m42{font:.85rem var(--mono);color:var(--muted);margin:2rem 0 0}.stamp.svelte-1280m42 b:where(.svelte-1280m42){color:var(--accent);letter-spacing:.04em}.missing.svelte-1280m42{color:var(--warn)}
+</style>
+  </head>
+  <body data-sveltekit-preload-data="hover"><div style="display: contents"><!--[--><!--[--><!--[0--><!--[--><!--[--><!--[-1--><!--[--><div class="kb svelte-e2jw2j"><header><a class="crumb svelte-e2jw2j" href="https://github.com/saucy-tech/mega-s01e03-what-it-shows/tree/main/support-kb/src/routes/kb">support desk · kb</a> <h1 class="svelte-e2jw2j">#4471 · two date problems merged into one ticket</h1> <p class="meta svelte-e2jw2j"><span>owner <b>Brandon</b></span> <span class="status reviewed svelte-e2jw2j">reviewed</span> <span class="svelte-e2jw2j">reviewed 2026-10-28 · 0 days ago</span></p></header> <!--[-1--><!--]--> <main><p>The <a href="https://github.com/saucy-tech/mega-s01e03-what-it-shows/blob/main/support-kb/src/routes/kb/incidents/4471/%2Bpage.svx">original #4471 page</a> says “one issue, one fix queued.”
+Its own report view separates two causes. They need separate tickets because the parser and the booking form fail in different ways.</p> <h2>What the desk can count</h2> <p><strong>412</strong> unique reports; <strong>2</strong> causes. The export contains 15 repeated rows with identical report IDs and content.</p> <table><caption class="svelte-kl6rzl">Reports filed under #4471, classified by the desk’s exported logic</caption><thead><tr><th scope="col">Problem</th><th scope="col">Reports</th><th scope="col">Ticket</th><th scope="col">Engineering outcome</th></tr></thead><tbody><!--[--><!--[0--><tr><th scope="row">parser</th><td>379</td><td><a href="https://github.com/saucy-tech/mega-s01e03-what-it-shows/issues/1">#1</a></td><td>Fixed: parse dd/mm for EU locales</td></tr><!--]--><!--[0--><tr><th scope="row">hint</th><td>33</td><td><a href="https://github.com/saucy-tech/mega-s01e03-what-it-shows/issues/2">#2</a></td><td>Won’t fix: booking-v3 form retired</td></tr><!--]--><!--]--></tbody></table> <!--[--><!--[0--><p>5 reports read as a one-day move. The desk files them under <code>parser</code> by tenant; they are included in that count, not added to it.</p> <p class="ids svelte-kl6rzl">R-41202, R-41209, R-41236, R-41344, R-41620</p><!--]--><!--[-1--><!--]--><!--]--><!----> <p>These counts follow <code>uniqueById</code>, <code>causeOf</code> and <code>groupByCause</code> in <code>src/lib/kb/causes.ts</code>,
+with each report’s tenant from <code>src/lib/data/tenants/</code>. One report ID counts once.
+Intake’s browser-locale tag is a guess; it does not decide the cause.</p> <h2>Parser: day-first dates read month first</h2> <p>The shared parser reads dates as month/day for tenants who write day/month.
+The day and month swap. Reports from app and email, and from forms without the booking-v3 hint,
+belong to the <a href="https://github.com/saucy-tech/mega-s01e03-what-it-shows/issues/1" rel="nofollow">parser ticket</a>.
+The five one-day reports above remain in the parser count because that is where the desk’s exported logic files them.
+Their wording alone does not establish a third cause or a separate engineering outcome.</p> <h2>Hint: booking-v3 tells people to type the wrong format</h2> <p>Booking-v3 prints <code>MM/DD/YYYY</code>, but its form reads dates in the tenant’s day-first format.
+The affected form reports come from alder.physio, copper.studio and pale.harbour.
+Changing the shared parser does not fix that mismatch. They belong to the <a href="https://github.com/saucy-tech/mega-s01e03-what-it-shows/issues/2" rel="nofollow">hint ticket</a>.</p> <h2>Engineering update: closed 2026-10-05</h2> <aside class="note svelte-17bri61"><!---->The live Challenge page reports: parser <strong>FIXED</strong>, <code>fix(dates): parse dd/mm for eu locales</code>;
+hint <strong>WON’T FIX</strong>, booking-v3 form retired. Retiring a form is not evidence that its hint was corrected.<!----></aside><!----> <p>Source: <a href="https://hq.mega.dev/challenges/what-it-shows" rel="nofollow">engineering update on the Challenge page</a>,
+checked 2026-10-28. The supplied kb was exported 2026-10-04, so it predates that update.
+Ticket outcomes must reflect this newer evidence.</p> <h2>Triage after #4471</h2> <p>The <a href="https://github.com/saucy-tech/mega-s01e03-what-it-shows/blob/main/support-kb/src/routes/kb/triage/dedupe/%2Bpage.svx">triage page</a> says to merge by normalized subject.
+Its component compares causes instead. Identical subjects can describe these two different problems;
+different subjects can describe the same cause. Read the report, resolve its tenant and channel,
+and merge only when the cause matches. Keep uncertain reports visible for review.</p> <p><a href="https://github.com/saucy-tech/mega-s01e03-what-it-shows/blob/main/support-kb/src/routes/kb/decisions/0001-dedupe-by-subject/%2Bpage.svx">Accepted decision 0001</a> records the old policy.
+It remains unchanged as the record of that decision. A replacement policy needs a new decision record.</p> <!--[0--><p class="stamp svelte-1280m42">desk ref <b class="svelte-1280m42">DR-WCJ1-V3RB</b></p><!--]--><!----><!----></main> <footer class="svelte-e2jw2j">Pages are written by people. Tables and charts are built from data at render time.</footer></div><!--]--><!--]--><!--]--><!----><!--]--><!--]--><!--]--><!----> <!--[-1--><!--]--><!--]-->
+
+
+		</div></body>
+</html>

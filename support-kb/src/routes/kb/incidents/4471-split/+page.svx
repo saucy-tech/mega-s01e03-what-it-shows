@@ -1,0 +1,63 @@
+---
+layout: runbook
+title: '#4471 · two date problems merged into one ticket'
+owner: Brandon
+status: reviewed
+reviewed: '2026-10-28'
+signature: Brandon
+---
+
+<script>
+  import SplitSummary from '#lib/kb/SplitSummary.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+</script>
+
+The [original #4471 page](/kb/incidents/4471) says “one issue, one fix queued.”
+Its own report view separates two causes. They need separate tickets because the parser and the booking form fail in different ways.
+
+## What the desk can count
+
+<SplitSummary />
+
+These counts follow `uniqueById`, `causeOf` and `groupByCause` in `src/lib/kb/causes.ts`,
+with each report’s tenant from `src/lib/data/tenants/`. One report ID counts once.
+Intake’s browser-locale tag is a guess; it does not decide the cause.
+
+## Parser: day-first dates read month first
+
+The shared parser reads dates as month/day for tenants who write day/month.
+The day and month swap. Reports from app and email, and from forms without the booking-v3 hint,
+belong to the [parser ticket](https://github.com/saucy-tech/mega-s01e03-what-it-shows/issues/1).
+The five one-day reports above remain in the parser count because that is where the desk’s exported logic files them.
+Their wording alone does not establish a third cause or a separate engineering outcome.
+
+## Hint: booking-v3 tells people to type the wrong format
+
+Booking-v3 prints `MM/DD/YYYY`, but its form reads dates in the tenant’s day-first format.
+The affected form reports come from alder.physio, copper.studio and pale.harbour.
+Changing the shared parser does not fix that mismatch. They belong to the
+[hint ticket](https://github.com/saucy-tech/mega-s01e03-what-it-shows/issues/2).
+
+## Engineering update: closed 2026-10-05
+
+<Callout>
+The live Challenge page reports: parser <strong>FIXED</strong>, <code>fix(dates): parse dd/mm for eu locales</code>;
+hint <strong>WON’T FIX</strong>, booking-v3 form retired. Retiring a form is not evidence that its hint was corrected.
+</Callout>
+
+Source: [engineering update on the Challenge page](https://hq.mega.dev/challenges/what-it-shows),
+checked 2026-10-28. The supplied kb was exported 2026-10-04, so it predates that update.
+Ticket outcomes must reflect this newer evidence.
+
+## Triage after #4471
+
+The [triage page](/kb/triage/dedupe) says to merge by normalized subject.
+Its component compares causes instead. Identical subjects can describe these two different problems;
+different subjects can describe the same cause. Read the report, resolve its tenant and channel,
+and merge only when the cause matches. Keep uncertain reports visible for review.
+
+[Accepted decision 0001](/kb/decisions/0001-dedupe-by-subject) records the old policy.
+It remains unchanged as the record of that decision. A replacement policy needs a new decision record.
+
+<RenderStamp {signature} />
